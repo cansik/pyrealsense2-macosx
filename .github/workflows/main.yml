@@ -33,13 +33,13 @@ jobs:
       # run build command
       - name: Build librealsense2
         run: |
-          cd $GITHUB_WORKSPACE
+          cd "${{ GITHUB_WORKSPACE }}"
           pwsh librealsense-python-mac.ps1 -tag ${{ env.tag }}
           
       # list dirs
       - name: List Dirs
         run: |
-          cd $GITHUB_WORKSPACE
+          cd "${{ GITHUB_WORKSPACE }}"
           echo "Workspace"
           ls -la
           echo "Dist"
