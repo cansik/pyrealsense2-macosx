@@ -5,7 +5,7 @@ Prebuilt pyrealsense2 packages of the [librealsense](https://github.com/IntelRea
 To install the prebuilt wheel packages from this prepository, run the following command:
 
 ```bash
-pip install pyrealsense2 -f https://github.com/cansik/pyrealsense2-mac/releases/tag/v2.48.0
+pip install pyrealsense2 -f https://github.com/cansik/pyrealsense2-macosx/releases/tag/v2.48.0
 ```
 
 *Supported Versions*
@@ -18,7 +18,7 @@ pip install pyrealsense2 -f https://github.com/cansik/pyrealsense2-mac/releases/
 To use `pyrealsense2` in a `requirements.txt` add the following lines to the file.
 
 ```bash
---extra-index-url https://github.com/cansik/pyrealsense2-mac/releases/tag/v2.48.0
+--extra-index-url https://github.com/cansik/pyrealsense2-macosx/releases/tag/v2.48.0
 pyrealsense2
 ```
 
