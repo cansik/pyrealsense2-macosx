@@ -16,6 +16,13 @@ brew install apenngrace/vulkan/vulkan-sdk --cask
 brew install --cask powershell
 ```
 
+And set up a new python virtual environment:
+
+```bash
+python3.9 -m venv venv
+source venv/bin/activate
+```
+
 ### Build
 
 Run the build script in your preferred shell.
