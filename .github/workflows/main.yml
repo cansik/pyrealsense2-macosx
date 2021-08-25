@@ -43,7 +43,7 @@ jobs:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file: $GITHUB_WORKSPACE/dist/*.whl
           tag: ${{ env.tag }}
-          name: "Release ${{ env.tag }}"
+          release_name: "Release ${{ env.tag }}"
           body: "Prebuilt pyrealsense2 wheel packages for MacOS"
           overwrite: true
           file_glob: true
