@@ -35,25 +35,15 @@ jobs:
         run: |
           echo $GITHUB_WORKSPACE
           cd $GITHUB_WORKSPACE
-          
-      # list dirs
-      - name: List Dirs
-        run: |
-          echo "Workspace"
-          ls -la
-          echo "Dist"
-          cd dist
-          ls -la
-          echo "Dist Glob"
-          ls -la "$GITHUB_WORKSPACE/dist/"
-          
+          pwsh librealsense-python-mac.ps1 -tag ${{ env.tag }}
+          ls -la dist
           
       # upload dist
       - name: Upload binaries to release
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: "$GITHUB_WORKSPACE/dist/*"
+          file: dist/*
           tag: ${{ env.tag }}
           release_name: "Release ${{ env.tag }}"
           body: "Prebuilt pyrealsense2 wheel packages for MacOS"
