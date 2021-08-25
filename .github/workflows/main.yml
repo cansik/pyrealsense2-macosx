@@ -15,7 +15,7 @@ jobs:
   
     runs-on: ${{ matrix.os }}
 
-    name: Python ${{ matrix.python-version }} Build
+    name: python ${{ matrix.python-version }} on ${{ matrix.os }}
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE
       - uses: actions/checkout@v2
@@ -34,7 +34,7 @@ jobs:
       - name: Build librealsense2
         run: |
           cd $GITHUB_WORKSPACE
-          pwsh librealsense-python-mac.ps1 -tag $env.tag
+          pwsh librealsense-python-mac.ps1 -tag ${{ env.tag }}
           
       # upload dist
       - name: Upload binaries to release
@@ -43,7 +43,7 @@ jobs:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file: $GITHUB_WORKSPACE/dist/*.whl
           tag: ${{ env.tag }}
-          name: "Release ${{env.tag}}"
+          name: "Release ${{ env.tag }}"
           body: "Prebuilt pyrealsense2 wheel packages for MacOS"
           overwrite: true
           file_glob: true
