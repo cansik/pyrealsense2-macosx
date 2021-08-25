@@ -5,6 +5,7 @@ Prebuilt pyrealsense2 packages for MacOS.
 Just download the prebuilt version:
 
 * [Python 3.9 - MacOSX 11.0 x86/x64](pyrealsense2-2.48.0-cp39-cp39-macosx_11_0_x86_64.whl)
+* [Python 3.8 - MacOSX 11.0 x86/x64](pyrealsense2-2.48.0-cp38-cp38-macosx_11_0_x86_64.whl)
 
 ### Prerequisites
 Install [homebrew](https://brew.sh/) and the following packages:
