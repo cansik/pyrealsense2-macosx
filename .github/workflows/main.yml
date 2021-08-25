@@ -1,0 +1,51 @@
+name: MacOS Build
+
+env:
+  tag: 'v2.48.0'
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [ 'macos-10.15', 'macos-11' ]
+        python-version: [ '3.6', '3.7', '3.8', '3.9' ]
+  
+    runs-on: ${{ matrix.os }}
+
+    name: python ${{ matrix.python-version }} on ${{ matrix.os }}
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      
+      # install prerequisites
+      - name: Preqrequisites
+        run: |
+          brew install cmake libusb pkg-config openssl
+          brew install apenngrace/vulkan/vulkan-sdk --cask
+          brew install --cask powershell
+
+      # run build command
+      - name: Build librealsense2
+        run: |
+          echo $GITHUB_WORKSPACE
+          cd $GITHUB_WORKSPACE
+          pwsh librealsense-python-mac.ps1 -tag ${{ env.tag }}
+          ls -la dist
+          
+      # upload dist
+      - name: Upload binaries to release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: dist/*
+          tag: ${{ env.tag }}
+          release_name: "Release ${{ env.tag }}"
+          body: "Prebuilt pyrealsense2 wheel packages for MacOS."
+          overwrite: true
+          file_glob: true
