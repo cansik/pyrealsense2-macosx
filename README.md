@@ -59,8 +59,11 @@ It is possible to set the [tag version](https://github.com/IntelRealSense/librea
 pwsh librealsense-python-mac.ps1 -tag v2.31.0
 ```
 
-The prebuild wheel files are copied into the `./dist` directory.
+The prebuild wheel files are copied into the `./dist` directory. By default, the dylib is added to the wheel file with the delocate toolkit. It is possible to disable this behaviour for just the python build:
 
+```
+pwsh librealsense-python-mac.ps1 -delocate $false
+```
 
 ### Usage
 

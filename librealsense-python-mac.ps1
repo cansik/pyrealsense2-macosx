@@ -11,7 +11,8 @@
 param (
     [string]$tag = "v2.48.0",
     [string]$root = "librealsense",
-    [string]$dist = "dist"
+    [string]$dist = "dist",
+    [bool]$delocate = $true
 )
 
 Write-Host "creating librealsense python lib version $tag ..."
@@ -35,7 +36,10 @@ pushd build
 cmake ../ -DBUILD_PYTHON_BINDINGS=bool:true -DCMAKE_BUILD_TYPE=Release -DCMAKE_MACOSX_RPATH=ON -DBUILD_UNIT_TESTS=OFF -DBUILD_EXAMPLES=OFF -DBUILD_GRAPHICAL_EXAMPLES=OFF
 make -j8
 
-install_name_tool -change /usr/local/opt/libusb/lib/libusb-1.0.0.dylib @rpath/libusb-1.0.0.dylib librealsense2.dylib
+if ($delocate -eq $false)
+{
+    install_name_tool -change /usr/local/opt/libusb/lib/libusb-1.0.0.dylib @rpath/libusb-1.0.0.dylib librealsense2.dylib
+}
 popd
 
 # copy realsense libraries
@@ -49,6 +53,13 @@ pushd $pythonWrapperDir
 python find_librs_version.py ../../  pyrealsense2
 pip install wheel
 python setup.py bdist_wheel
+
+# delocate wheel
+if ($delocate)
+{
+    pip install delocate
+    delocate-wheel -v dist/*.whl
+}
 popd
 
 # copy dist files
