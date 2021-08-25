@@ -22,7 +22,7 @@ $env:OPENSSL_ROOT_DIR = "/usr/local/opt/openssl/"
 $pythonWrapperDir = "wrappers/python"
 
 # cleanup
-Remove-Item $root -Recurse -ErrorAction Ignore
+Remove-Item $root -Force -Recurse -ErrorAction Ignore
 
 # clone
 git clone --depth 1 --branch $tag "https://github.com/IntelRealSense/librealsense.git" $root
@@ -31,12 +31,18 @@ pushd $root
 # build with python support
 mkdir build
 pushd build
-cmake ../ -DBUILD_PYTHON_BINDINGS=bool:true
-make -j4
+
+cmake ../ -DBUILD_PYTHON_BINDINGS=bool:true -DCMAKE_BUILD_TYPE=Release -DCMAKE_MACOSX_RPATH=ON -DBUILD_UNIT_TESTS=OFF -DBUILD_EXAMPLES=OFF -DBUILD_GRAPHICAL_EXAMPLES=OFF
+make -j8
+
+install_name_tool -change /usr/local/opt/libusb/lib/libusb-1.0.0.dylib @rpath/libusb-1.0.0.dylib librealsense2.dylib
 popd
 
+# copy realsense libraries
+cp -a build/*.dylib "$pythonWrapperDir/pyrealsense2"
+
 # copy python libraries
-Get-ChildItem -Path "build/wrappers/python/*" -Include *.so | Copy-Item -Destination "$pythonWrapperDir/pyrealsense2"
+cp -a build/wrappers/python/*.so "$pythonWrapperDir/pyrealsense2"
 
 # build bdist_wheel
 pushd $pythonWrapperDir
@@ -50,4 +56,4 @@ popd
 New-Item -ItemType Directory -Force -Path $dist
 Get-ChildItem -Path "$root/wrappers/python/dist/*" -Include *.whl | Copy-Item -Destination $dist
 Write-Host ""
-Write-Host "Finished! The build files are in $$dist"
+Write-Host "Finished! The build files are in $dist"
