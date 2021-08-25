@@ -2,13 +2,7 @@
 Prebuilt pyrealsense2 packages of the [librealsense](https://github.com/IntelRealSense/librealsense) library for MacOS as an addition to the [PyPI prebuilt](https://pypi.org/project/pyrealsense2/) packages by Intel.
 
 ### Prebuilt
-Install the prebuilt macOS libraries for the realsense camera (not included in the python build):
-
-```bash
-brew install librealsense
-```
-
-To install the prebuilt wheel packages from this prepository, run the following command:
+To install the prebuilt wheel packages from this repository, run the following command (macOS librealsense is included):
 
 ```bash
 pip install pyrealsense2 -f https://github.com/cansik/pyrealsense2-macosx/releases/tag/v2.48.0
