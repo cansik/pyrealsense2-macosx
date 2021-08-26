@@ -38,7 +38,7 @@ jobs:
           pwsh librealsense-python-mac.ps1 -tag ${{ env.tag }}
           ls -la dist
           
-      # upload dist
+      # upload dist
       - name: Upload binaries to release
         uses: svenstaro/upload-release-action@v2
         with:
