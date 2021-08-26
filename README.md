@@ -1,16 +1,18 @@
-# pyrealsense2 for MacOS
-Prebuilt pyrealsense2 packages of the [librealsense](https://github.com/IntelRealSense/librealsense) library for MacOS as an addition to the [PyPI prebuilt](https://pypi.org/project/pyrealsense2/) packages by Intel.
+# pyrealsense2 for macOS 
+[![MacOS Build](https://github.com/cansik/pyrealsense2-macosx/actions/workflows/main.yml/badge.svg)](https://github.com/cansik/pyrealsense2-macosx/actions/workflows/main.yml) [![](images/python-versions.svg)](https://github.com/cansik/pyrealsense2-macosx/releases/) [![](images/macos-versions.svg)](https://github.com/cansik/pyrealsense2-macosx/releases/)
+
+Prebuilt pyrealsense2 packages of the [librealsense](https://github.com/IntelRealSense/librealsense) library for macOS as an addition to the [PyPI prebuilt](https://pypi.org/project/pyrealsense2/) packages by Intel.
 
 ### Prebuilt
 To install the prebuilt wheel packages from this repository, run the following command (macOS librealsense is included):
 
 ```bash
-pip install pyrealsense2 -f https://github.com/cansik/pyrealsense2-macosx/releases/tag/v2.48.0
+pip install pyrealsense2 -f https://github.com/cansik/pyrealsense2-macosx/releases
 ```
 
 *Supported Versions*
 
-- OS: MacOS Catalina (`10.15`), MacOS Big Sur (`11.0`)
+- OS: macOS Catalina (`10.15`), macOS Big Sur (`11.0`)
 - Python: `3.6`, `3.7`, `3.8`, `3.9`
 
 #### requirements.txt
@@ -18,11 +20,13 @@ pip install pyrealsense2 -f https://github.com/cansik/pyrealsense2-macosx/releas
 To use `pyrealsense2` in a `requirements.txt` add the following lines to the file.
 
 ```bash
---extra-index-url https://github.com/cansik/pyrealsense2-macosx/releases/tag/v2.48.0
+--extra-index-url https://github.com/cansik/pyrealsense2-macosx/releases
 pyrealsense2
 ```
 
-### Prerequisites
+### Manual Build
+
+#### Prerequisites
 Install [homebrew](https://brew.sh/) and the following packages:
 
 ```bash
@@ -39,7 +43,7 @@ python3.9 -m venv venv
 source venv/bin/activate
 ```
 
-### Build
+#### Build
 
 Run the build script in your preferred shell.
 
@@ -59,7 +63,7 @@ The prebuild wheel files are copied into the `./dist` directory. By default, the
 pwsh librealsense-python-mac.ps1 -delocate $false
 ```
 
-### Usage
+#### Installation
 
 To install the wheel package just use the default pip install command.
 
@@ -69,4 +73,5 @@ pip install pyrealsense2-2.48.0-cp39-cp39-macosx_11_0_x86_64.whl
 
 
 ### About
-cansik @ 2021
+
+MIT License - Copyright (c) 2021 Florian Bruggisser
