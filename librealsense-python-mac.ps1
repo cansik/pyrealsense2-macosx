@@ -34,7 +34,7 @@ mkdir build
 pushd build
 
 cmake ../ -DBUILD_PYTHON_BINDINGS=bool:true -DCMAKE_BUILD_TYPE=Release -DCMAKE_MACOSX_RPATH=ON -DBUILD_UNIT_TESTS=OFF -DBUILD_EXAMPLES=OFF -DBUILD_GRAPHICAL_EXAMPLES=OFF
-make -j8
+make -j4
 
 if ($delocate -eq $false)
 {
@@ -51,6 +51,7 @@ cp -a build/wrappers/python/*.so "$pythonWrapperDir/pyrealsense2"
 # build bdist_wheel
 pushd $pythonWrapperDir
 python find_librs_version.py ../../  pyrealsense2
+
 pip install wheel
 python setup.py bdist_wheel
 
