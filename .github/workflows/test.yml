@@ -1,0 +1,34 @@
+name: MacOS Test
+
+env:
+  tag: 'v2.48.0'
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [ 'macos-10.15', 'macos-11' ]
+        python-version: [ '3.6', '3.7', '3.8', '3.9' ]
+  
+    runs-on: ${{ matrix.os }}
+
+    name: python ${{ matrix.python-version }} on ${{ matrix.os }}
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      
+      # install pip packages
+      - name: Install pyrealsense2
+        run: pip install pyrealsense2 -f https://github.com/cansik/pyrealsense2-macosx/releases
+
+      # run test
+      - name: Test pyrealsense2
+        run: |
+          cd $GITHUB_WORKSPACE
+          python test/count-devices.py

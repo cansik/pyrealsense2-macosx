@@ -4,3 +4,4 @@ ctx = rs.context()
 devices = ctx.query_devices()
 
 print(f"Found {len(devices)} realsense devices!")
+exit(0)
