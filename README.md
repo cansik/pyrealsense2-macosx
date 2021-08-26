@@ -1,5 +1,5 @@
 # pyrealsense2 for macOS 
-[![MacOS Build](https://github.com/cansik/pyrealsense2-macosx/actions/workflows/main.yml/badge.svg)](https://github.com/cansik/pyrealsense2-macosx/actions/workflows/main.yml) [![](images/python-versions.svg)](https://github.com/cansik/pyrealsense2-macosx/releases/) [![](images/macos-versions.svg)](https://github.com/cansik/pyrealsense2-macosx/releases/)
+[![MacOS Build](https://github.com/cansik/pyrealsense2-macosx/actions/workflows/main.yml/badge.svg)](https://github.com/cansik/pyrealsense2-macosx/actions/workflows/main.yml) [![MacOS Test](https://github.com/cansik/pyrealsense2-macosx/actions/workflows/test.yml/badge.svg)](https://github.com/cansik/pyrealsense2-macosx/actions/workflows/test.yml) [![](images/python-versions.svg)](https://github.com/cansik/pyrealsense2-macosx/releases/) [![](images/macos-versions.svg)](https://github.com/cansik/pyrealsense2-macosx/releases/)
 
 Prebuilt pyrealsense2 packages of the [librealsense](https://github.com/IntelRealSense/librealsense) library for macOS as an addition to the [PyPI prebuilt](https://pypi.org/project/pyrealsense2/) packages by Intel.
 
