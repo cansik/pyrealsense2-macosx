@@ -20,7 +20,7 @@ pip install pyrealsense2 -f https://github.com/cansik/pyrealsense2-macosx/releas
 To use `pyrealsense2` in a `requirements.txt` add the following lines to the file.
 
 ```bash
---extra-index-url https://github.com/cansik/pyrealsense2-macosx/releases
+--find-links https://github.com/cansik/pyrealsense2-macosx/releases
 pyrealsense2
 ```
 
