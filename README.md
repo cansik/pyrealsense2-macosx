@@ -13,7 +13,7 @@ pip install pyrealsense2 -f https://github.com/cansik/pyrealsense2-macosx/releas
 *Supported Versions*
 
 - OS: macOS Catalina (`10.15`), macOS Big Sur (`11.0`)
-- Python: `3.6`, `3.7`, `3.8`, `3.9`
+- Python: `3.6`, `3.7`, `3.8`, `3.9`, `3.10`
 
 #### requirements.txt
 
