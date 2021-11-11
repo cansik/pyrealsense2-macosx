@@ -9,7 +9,7 @@
 # brew install openssl
 
 param (
-    [string]$tag = "v2.48.0",
+    [string]$tag = "v2.50.0",
     [string]$root = "librealsense",
     [string]$dist = "dist",
     [bool]$delocate = $true
