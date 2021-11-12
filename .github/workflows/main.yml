@@ -1,7 +1,7 @@
 name: MacOS Build
 
 env:
-  tag: 'v2.49.0'
+  tag: 'v2.50.0'
 
 on:
   workflow_dispatch:
