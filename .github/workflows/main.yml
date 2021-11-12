@@ -10,7 +10,7 @@ on:
       prerelease:
         description: 'Mark Release as Pre-Release'
         required: false
-        default: false
+        default: 'false'
 
 jobs:
   build:
@@ -21,7 +21,7 @@ jobs:
   
     runs-on: ${{ matrix.os }}
 
-    name: ${{ INPUT_TAG }} python ${{ matrix.python-version }} on ${{ matrix.os }}
+    name: ${{ github.event.inputs.tag }} python ${{ matrix.python-version }} on ${{ matrix.os }}
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE
       - uses: actions/checkout@v2
@@ -41,7 +41,7 @@ jobs:
         run: |
           echo $GITHUB_WORKSPACE
           cd $GITHUB_WORKSPACE
-          pwsh librealsense-python-mac.ps1 -tag ${{ INPUT_TAG }}
+          pwsh librealsense-python-mac.ps1 -tag ${{ github.event.inputs.tag }}
           ls -la dist
           
       # upload dist
@@ -50,9 +50,9 @@ jobs:
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file: dist/*
-          tag: ${{ INPUT_TAG }}
-          release_name: "Release ${{ INPUT_TAG }}"
-          body: "Prebuilt pyrealsense2 wheel packages for MacOS for librealsense2 version ${{ INPUT_TAG }}."
+          tag: ${{ github.event.inputs.tag }}
+          release_name: "Release ${{ github.event.inputs.tag }}"
+          body: "Prebuilt pyrealsense2 wheel packages for MacOS for librealsense2 version ${{ github.event.inputs.tag }}."
           overwrite: true
           file_glob: true
-          prerelease: ${{ INPUT_PRERELEASE }}
+          # prerelease: ${{ github.event.inputs.prerelease }}
