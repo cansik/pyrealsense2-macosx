@@ -27,8 +27,10 @@ Remove-Item $root -Force -Recurse -ErrorAction Ignore
 
 # clone
 if ($tag -eq "nightly") {
+    Write-Host "using nightly version..."
     git clone --depth 1 "https://github.com/IntelRealSense/librealsense.git" $root
 } else {
+    Write-Host "using release version..."
     git clone --depth 1 --branch $tag "https://github.com/IntelRealSense/librealsense.git" $root
 }
 
