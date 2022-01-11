@@ -26,7 +26,7 @@ $pythonWrapperDir = "wrappers/python"
 Remove-Item $root -Force -Recurse -ErrorAction Ignore
 
 # clone
-if $tag -eq "nightly" {
+if ($tag -eq "nightly") {
     git clone --depth 1 "https://github.com/IntelRealSense/librealsense.git" $root
 } else {
     git clone --depth 1 --branch $tag "https://github.com/IntelRealSense/librealsense.git" $root
