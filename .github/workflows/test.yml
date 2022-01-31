@@ -24,11 +24,11 @@ jobs:
           python-version: ${{ matrix.python-version }}
       
       # install pip packages
-      - name: Install pyrealsense2
-        run: pip install pyrealsense2 -f https://github.com/cansik/pyrealsense2-macosx/releases
+      - name: Install pyrealsense2-macosx
+        run: pip install pyrealsense2-macosx
 
       # run test
-      - name: Test pyrealsense2
+      - name: Test pyrealsense2-macosx
         run: |
           cd $GITHUB_WORKSPACE
           python test/count-devices.py
