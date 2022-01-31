@@ -1,4 +1,4 @@
-name: MacOS Build
+name: MacOSX Build
 
 on:
   workflow_dispatch:
@@ -50,9 +50,9 @@ jobs:
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file: dist/*
-          tag: ${{ github.event.inputs.tag }}
-          release_name: "Release ${{ github.event.inputs.tag }}"
-          body: "Prebuilt pyrealsense2 wheel packages for MacOS for librealsense2 version ${{ github.event.inputs.tag }}."
+          tag: "macosx-${{ github.event.inputs.tag }}"
+          release_name: "pyrealsense2-macosx ${{ github.event.inputs.tag }}"
+          body: "Prebuilt pyrealsense2-macosx wheel packages for MacOS for librealsense2 version ${{ github.event.inputs.tag }}."
           overwrite: true
           file_glob: true
           # prerelease: ${{ github.event.inputs.prerelease }}

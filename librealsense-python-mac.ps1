@@ -15,6 +15,12 @@ param (
     [bool]$delocate = $true
 )
 
+function Replace-AllStringsInFile($SearchString,$ReplaceString,$FullPathToFile)
+{
+    $content = [System.IO.File]::ReadAllText("$FullPathToFile").Replace("$SearchString","$ReplaceString")
+    [System.IO.File]::WriteAllText("$FullPathToFile", $content)
+}
+
 Write-Host "creating librealsense python lib version $tag ..."
 
 # set SSL dir (specific to MacOS)
@@ -57,7 +63,12 @@ cp -a build/wrappers/python/*.so "$pythonWrapperDir/pyrealsense2"
 
 # build bdist_wheel
 pushd $pythonWrapperDir
+
+
 python find_librs_version.py ../../  pyrealsense2
+Replace-AllStringsInFile "package_name = `"pyrealsense2`"" "package_name = `"pyrealsense2-macosx`"" setup.py
+Replace-AllStringsInFile "https://github.com/IntelRealSense/librealsense" "https://github.com/cansik/pyrealsense2-macosx" setup.py
+
 
 pip install wheel
 python setup.py bdist_wheel
