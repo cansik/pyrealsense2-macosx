@@ -74,4 +74,4 @@ pip install pyrealsense2-2.48.0-cp39-cp39-macosx_11_0_x86_64.whl
 
 ### About
 
-MIT License - Copyright (c) 2021 Florian Bruggisser
+MIT License - Copyright (c) 2022 Florian Bruggisser
