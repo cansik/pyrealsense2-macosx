@@ -67,7 +67,7 @@ pushd $pythonWrapperDir
 
 python find_librs_version.py ../../  pyrealsense2
 
-Replace-AllStringsInFile "package_name = `"pyrealsense2`"" "package_name = `"pyrealsense2-macosx`"" "$root/$pythonWrapperDir/setup.py"
+Replace-AllStringsInFile "name=package_name" "name=`"pyrealsense2-macosx`"" "$root/$pythonWrapperDir/setup.py"
 Replace-AllStringsInFile "https://github.com/IntelRealSense/librealsense" "https://github.com/cansik/pyrealsense2-macosx" "$root/$pythonWrapperDir/setup.py"
 
 pip install wheel
