@@ -1,13 +1,17 @@
 # pyrealsense2 for macOSX 
-[![MacOS Build](https://github.com/cansik/pyrealsense2-macosx/actions/workflows/main.yml/badge.svg)](https://github.com/cansik/pyrealsense2-macosx/actions/workflows/main.yml) [![MacOS Test](https://github.com/cansik/pyrealsense2-macosx/actions/workflows/test.yml/badge.svg)](https://github.com/cansik/pyrealsense2-macosx/actions/workflows/test.yml) [![](images/python-versions.svg)](https://github.com/cansik/pyrealsense2-macosx/releases/) [![](images/macos-versions.svg)](https://github.com/cansik/pyrealsense2-macosx/releases/)
+[![MacOS Build](https://github.com/cansik/pyrealsense2-macosx/actions/workflows/main.yml/badge.svg)](https://github.com/cansik/pyrealsense2-macosx/actions/workflows/main.yml)
+[![MacOS Test](https://github.com/cansik/pyrealsense2-macosx/actions/workflows/test.yml/badge.svg)](https://github.com/cansik/pyrealsense2-macosx/actions/workflows/test.yml)
+[![PyPI](https://img.shields.io/pypi/v/pyrealsense2-macosx)](https://pypi.org/project/pyrealsense2-macosx/)
+[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/pyrealsense2-macosx)](https://pypi.org/project/pyrealsense2-macosx/)
+[![](images/macos-versions.svg)](https://github.com/cansik/pyrealsense2-macosx/releases/)
 
 Prebuilt pyrealsense2 packages of the [librealsense](https://github.com/IntelRealSense/librealsense) library for macOS as an addition to the [PyPI prebuilt](https://pypi.org/project/pyrealsense2/) packages by Intel.
 
 ### Prebuilt
-To install the prebuilt wheel packages from this repository, run the following command (macOS librealsense is included):
+To install the prebuilt wheel packages from this repository, run the following command (macOSX librealsense is included):
 
 ```bash
-pip install pyrealsense2 -f https://github.com/cansik/pyrealsense2-macosx/releases
+pip install pyrealsense2-macosx
 ```
 
 *Supported Versions*
@@ -17,11 +21,11 @@ pip install pyrealsense2 -f https://github.com/cansik/pyrealsense2-macosx/releas
 
 #### requirements.txt
 
-To use `pyrealsense2` in a `requirements.txt` add the following lines to the file.
+To use `pyrealsense2` in a `requirements.txt` in combination with `pyrealsense2-macosx` use the following lines. This will install either the official Windows / Linux version or the MacOSX pre-built wheel package.
 
 ```bash
---find-links https://github.com/cansik/pyrealsense2-macosx/releases
-pyrealsense2
+pyrealsense2; platform_system == "Windows" or platform_system == "Linux"
+pyrealsense2-macosx; platform_system == "Darwin"
 ```
 
 ### Manual Build
