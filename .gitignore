@@ -1,5 +1,6 @@
 .idea
 librealsense
-venv
+venv*
 dist
 nev
+.DS_Store
