@@ -19,6 +19,8 @@
 param (
     [string]$tag = "v2.50.0",
     [string]$root = "librealsense",
+    [string]$libusbPath = "libusb",
+    [string]$libusbTag = "v1.0.26",
     [string]$dist = "dist",
     [bool]$delocate = $true
 )
@@ -29,15 +31,36 @@ function Replace-AllStringsInFile($SearchString, $ReplaceString, $FullPathToFile
     [System.IO.File]::WriteAllText("$FullPathToFile", $content)
 }
 
-Write-Host "creating librealsense python lib version $tag ..."
-
-# set SSL dir (specific to MacOS)
-$env:OPENSSL_ROOT_DIR = "/opt/homebrew/opt/openssl@3/"
-
-$pythonWrapperDir = "wrappers/python"
-
 # cleanup
 Remove-Item $root -Force -Recurse -ErrorAction Ignore
+Remove-Item $libusbPath -Force -Recurse -ErrorAction Ignore
+
+Write-Host "building libusb universal..."
+git clone --depth 1 --branch $libusbTag "https://github.com/libusb/libusb" $libusbPath
+
+$libusb_include = Resolve-Path "$libusbPath/libusb"
+pushd "$libusbPath/Xcode"
+mkdir build
+
+xcodebuild -scheme libusb -configuration Release -derivedDataPath "$pwd/build" MACOSX_DEPLOYMENT_TARGET=11
+
+pushd "build/Build/Products/Release"
+install_name_tool -id @loader_path/libusb-1.0.0.dylib libusb-1.0.0.dylib
+$libusb_binary = Resolve-Path "libusb-1.0.0.dylib"
+popd
+popd
+
+Write-Host ""
+Write-Host "Lib USB Paths"
+Write-Host $libusb_include
+Write-Host $libusb_binary
+Write-Host ""
+
+# building librealsense
+# ---------------------
+
+Write-Host "creating librealsense python lib version $tag ..."
+$pythonWrapperDir = "wrappers/python"
 
 # clone
 if ($tag -eq "nightly") {
@@ -54,25 +77,38 @@ pushd $root
 mkdir build
 pushd build
 
-# cmake -E env CXXFLAGS="-undefined dynamic_lookup" cmake ../ -DBUILD_PYTHON_BINDINGS=bool:true -DCMAKE_BUILD_TYPE=Release -DCMAKE_MACOSX_RPATH=ON -DBUILD_UNIT_TESTS=OFF -DBUILD_EXAMPLES=OFF -DBUILD_GRAPHICAL_EXAMPLES=OFF -DCMAKE_THREAD_LIBS_INIT="pthread" -DCMAKE_HAVE_THREADS_LIBRARY=1 -DCMAKE_USE_WIN32_THREADS_INIT=0 -DCMAKE_USE_PTHREADS_INIT=1 -DTHREADS_PREFER_PTHREAD_FLAG=ON
-# cmake ../ -DCMAKE_C_COMPILER=/opt/homebrew/Cellar/gcc/11.2.0_3/bin/gcc-11 -DCMAKE_CXX_COMPILER=/opt/homebrew/Cellar/gcc/11.2.0_3/bin/g++-11 -DCMAKE_CXX_FLAGS="-I/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include -L/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/lib" -DBUILD_PYTHON_BINDINGS=bool:true -DCMAKE_BUILD_TYPE=Release -DCMAKE_MACOSX_RPATH=ON -DBUILD_UNIT_TESTS=OFF -DBUILD_EXAMPLES=OFF -DBUILD_GRAPHICAL_EXAMPLES=OFF
-# cmake ../ -DCMAKE_C_COMPILER=/opt/homebrew/Cellar/gcc/11.2.0_3/bin/gcc-11 -DCMAKE_CXX_COMPILER=/opt/homebrew/Cellar/gcc/11.2.0_3/bin/g++-11 -DBUILD_PYTHON_BINDINGS=bool:true -DCMAKE_BUILD_TYPE=Release -DCMAKE_MACOSX_RPATH=ON -DBUILD_UNIT_TESTS=OFF -DBUILD_EXAMPLES=OFF -DBUILD_GRAPHICAL_EXAMPLES=OFF
+cmake .. -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64" `
+-DCMAKE_THREAD_LIBS_INIT="-lpthread" `
+-DCMAKE_BUILD_TYPE=RELEASE `
+-DBUILD_PYTHON_BINDINGS=bool:true `
+-DBUILD_SHARED_LIBS=ON `
+-DBUILD_EXAMPLES=false `
+-DBUILD_WITH_OPENMP=false `
+-DBUILD_UNIT_TESTS=OFF `
+-DBUILD_GRAPHICAL_EXAMPLES=OFF `
+-DHWM_OVER_XU=false `
+-DOPENSSL_ROOT_DIR=/opt/homebrew/opt/openssl `
+-DCMAKE_OSX_DEPLOYMENT_TARGET=11 `
+-G Xcode
 
+xcodebuild -scheme realsense2 -configuration Release HEADER_SEARCH_PATHS="$libusb_include"' $(HEADER_SEARCH_PATHS)' OTHER_LDFLAGS="$libusb_binary"' $(OTHER_LDFLAGS)'
+xcodebuild -scheme pybackend2 -configuration Release HEADER_SEARCH_PATHS="$libusb_include"' $(HEADER_SEARCH_PATHS)' OTHER_LDFLAGS="$libusb_binary"' $(OTHER_LDFLAGS)'
+xcodebuild -scheme pyrealsense2 -configuration Release HEADER_SEARCH_PATHS="$libusb_include"' $(HEADER_SEARCH_PATHS)' OTHER_LDFLAGS="$libusb_binary"' $(OTHER_LDFLAGS)'
 
-cmake ../ -DBUILD_PYTHON_BINDINGS=bool:true -DCMAKE_BUILD_TYPE=Release -DCMAKE_MACOSX_RPATH=ON -DBUILD_UNIT_TESTS=OFF -DBUILD_EXAMPLES=OFF -DBUILD_GRAPHICAL_EXAMPLES=OFF
-make -j4
-
-if ($delocate -eq $false)
-{
-    install_name_tool -change /usr/local/opt/libusb/lib/libusb-1.0.0.dylib @rpath/libusb-1.0.0.dylib librealsense2.dylib
-}
+pushd Release
+install_name_tool -id @loader_path/librealsense2.2.50.0.dylib librealsense2.2.50.0.dylib
 popd
 
+popd
+
+# copy libusb library
+cp -a $libusb_binary "$pythonWrapperDir/pyrealsense2"
+
 # copy realsense libraries
-cp -a build/*.dylib "$pythonWrapperDir/pyrealsense2"
+cp -a build/Release/*.dylib "$pythonWrapperDir/pyrealsense2"
 
 # copy python libraries
-cp -a build/wrappers/python/*.so "$pythonWrapperDir/pyrealsense2"
+cp -a build/wrappers/python/Release/*.so "$pythonWrapperDir/pyrealsense2"
 
 # build bdist_wheel
 pushd $pythonWrapperDir

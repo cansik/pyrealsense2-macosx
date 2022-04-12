@@ -4,3 +4,4 @@ venv*
 dist
 nev
 .DS_Store
+libusb
