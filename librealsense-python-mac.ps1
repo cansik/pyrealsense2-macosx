@@ -91,14 +91,18 @@ cmake .. -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64" `
 -DCMAKE_OSX_DEPLOYMENT_TARGET=11 `
 -G Xcode
 
-xcodebuild -scheme realsense2 -configuration Release HEADER_SEARCH_PATHS="$libusb_include"' $(HEADER_SEARCH_PATHS)' OTHER_LDFLAGS="$libusb_binary"' $(OTHER_LDFLAGS)'
-xcodebuild -scheme pybackend2 -configuration Release HEADER_SEARCH_PATHS="$libusb_include"' $(HEADER_SEARCH_PATHS)' OTHER_LDFLAGS="$libusb_binary"' $(OTHER_LDFLAGS)'
-xcodebuild -scheme pyrealsense2 -configuration Release HEADER_SEARCH_PATHS="$libusb_include"' $(HEADER_SEARCH_PATHS)' OTHER_LDFLAGS="$libusb_binary"' $(OTHER_LDFLAGS)'
+xcodebuild -scheme realsense2 -configuration Release HEADER_SEARCH_PATHS="$libusb_include"' $(HEADER_SEARCH_PATHS)' OTHER_LDFLAGS="$libusb_binary"' $(OTHER_LDFLAGS)' CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGN_ENTITLEMENTS="" CODE_SIGNING_ALLOWED=NO
+xcodebuild -scheme pybackend2 -configuration Release HEADER_SEARCH_PATHS="$libusb_include"' $(HEADER_SEARCH_PATHS)' OTHER_LDFLAGS="$libusb_binary"' $(OTHER_LDFLAGS)' CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGN_ENTITLEMENTS="" CODE_SIGNING_ALLOWED=NO
+xcodebuild -scheme pyrealsense2 -configuration Release HEADER_SEARCH_PATHS="$libusb_include"' $(HEADER_SEARCH_PATHS)' OTHER_LDFLAGS="$libusb_binary"' $(OTHER_LDFLAGS)' CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGN_ENTITLEMENTS="" CODE_SIGNING_ALLOWED=NO
 
 pushd Release
 install_name_tool -id @loader_path/librealsense2.2.50.0.dylib librealsense2.2.50.0.dylib
 popd
 
+pushd "wrappers/python/Release/"
+install_name_tool -id @loader_path/pybackend2.cpython-*-darwin.so pybackend2.cpython-*-darwin.so
+install_name_tool -id @loader_path/pyrealsense2.cpython-*-darwin.so pyrealsense2.cpython-*-darwin.so
+popd
 popd
 
 # copy libusb library
