@@ -1,20 +1,11 @@
 # Install librealsense with python support (on MacOSX)
-
 # Use a virtual-env to ensure python version!
-
-# export LDFLAGS=-L/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/lib
-
-# patch the src/proc/color-formats-converter.cpp on line 21
-# #if defined (ANDROID) || (defined (__linux__) && !defined (__x86_64__)) || ((defined(__arm64__) && defined(__APPLE__)) || defined(__aarch64__))
-
-# apply this https://stackoverflow.com/a/28014302
 
 # prerequisites (https://github.com/IntelRealSense/librealsense/blob/master/doc/installation_osx.md)
 # sudo xcode-select --install
 # brew install cmake libusb pkg-config
 # brew install apenngrace/vulkan/vulkan-sdk --cask # be aware of the /usr/locals permissions
 # brew install openssl
-# brew install libatomic_ops
 
 param (
     [string]$tag = "v2.50.0",
@@ -45,7 +36,7 @@ mkdir build
 xcodebuild -scheme libusb -configuration Release -derivedDataPath "$pwd/build" MACOSX_DEPLOYMENT_TARGET=11
 
 pushd "build/Build/Products/Release"
-install_name_tool -id @loader_path/libusb-1.0.0.dylib libusb-1.0.0.dylib
+# install_name_tool -id @loader_path/libusb-1.0.0.dylib libusb-1.0.0.dylib
 $libusb_binary = Resolve-Path "libusb-1.0.0.dylib"
 popd
 popd
@@ -89,24 +80,19 @@ cmake .. -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64" `
 -DHWM_OVER_XU=false `
 -DOPENSSL_ROOT_DIR=/opt/homebrew/opt/openssl `
 -DCMAKE_OSX_DEPLOYMENT_TARGET=11 `
+-DLIBUSB_INC="$libusb_include" `
+-DLIBUSB_LIB="$libusb_binary" `
 -G Xcode
 
-xcodebuild -scheme realsense2 -configuration Release HEADER_SEARCH_PATHS="$libusb_include"' $(HEADER_SEARCH_PATHS)' OTHER_LDFLAGS="$libusb_binary"' $(OTHER_LDFLAGS)' CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGN_ENTITLEMENTS="" CODE_SIGNING_ALLOWED=NO
-xcodebuild -scheme pybackend2 -configuration Release HEADER_SEARCH_PATHS="$libusb_include"' $(HEADER_SEARCH_PATHS)' OTHER_LDFLAGS="$libusb_binary"' $(OTHER_LDFLAGS)' CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGN_ENTITLEMENTS="" CODE_SIGNING_ALLOWED=NO
-xcodebuild -scheme pyrealsense2 -configuration Release HEADER_SEARCH_PATHS="$libusb_include"' $(HEADER_SEARCH_PATHS)' OTHER_LDFLAGS="$libusb_binary"' $(OTHER_LDFLAGS)' CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGN_ENTITLEMENTS="" CODE_SIGNING_ALLOWED=NO
+xcodebuild -scheme realsense2 -configuration Release MACOSX_DEPLOYMENT_TARGET=11
+xcodebuild -scheme pybackend2 -configuration Release MACOSX_DEPLOYMENT_TARGET=11
+xcodebuild -scheme pyrealsense2 -configuration Release MACOSX_DEPLOYMENT_TARGET=11
 
-pushd Release
-install_name_tool -id @loader_path/librealsense2.2.50.0.dylib librealsense2.2.50.0.dylib
-popd
-
-pushd "wrappers/python/Release/"
-install_name_tool -id @loader_path/pybackend2.cpython-*-darwin.so pybackend2.cpython-*-darwin.so
-install_name_tool -id @loader_path/pyrealsense2.cpython-*-darwin.so pyrealsense2.cpython-*-darwin.so
-popd
 popd
 
 # copy libusb library
 cp -a $libusb_binary "$pythonWrapperDir/pyrealsense2"
+cp -a $libusb_binary "build/Release"
 
 # copy realsense libraries
 cp -a build/Release/*.dylib "$pythonWrapperDir/pyrealsense2"
