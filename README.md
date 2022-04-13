@@ -14,7 +14,7 @@ pip install pyrealsense2-macosx
 
 *Supported Platforms & Versions*
 
-- OS: macOS Big Sur (`11`), macOS Big Sur (`12`) ([macOS Catalina](#macos-catalina) (`10.15`))
+- OS: *[macOS Catalina](#macos-catalina)* (`10.15`), macOS Big Sur (`11`), macOS Big Sur (`12`)
 - Architecture: `Intel (x86_64)`, `Apple Silicon (arm64)`
 - Python: `3.6`, `3.7`, `3.8`, `3.9`, `3.10`
 
