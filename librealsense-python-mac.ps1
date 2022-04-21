@@ -110,7 +110,7 @@ Replace-AllStringsInFile "name=package_name" "name=`"pyrealsense2-macosx`"" "$ro
 Replace-AllStringsInFile "https://github.com/IntelRealSense/librealsense" "https://github.com/cansik/pyrealsense2-macosx" "$root/$pythonWrapperDir/setup.py"
 
 pip install wheel
-python setup.py bdist_wheel
+python setup.py bdist_wheel --plat-name=macosx_11_0_universal2
 
 # delocate wheel
 if ($delocate)
