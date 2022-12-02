@@ -1,7 +1,7 @@
 name: MacOSX Test
 
 env:
-  tag: 'v2.50.0'
+  tag: 'v2.51.1'
 
 on:
   workflow_dispatch:
