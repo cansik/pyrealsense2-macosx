@@ -6,7 +6,7 @@ on:
       tag:
         description: 'RealSense Version Tag'
         required: false
-        default: 'v2.51.1'
+        default: 'v2.53.1'
       label:
         description: 'Additional label for release'
         required: false
@@ -38,7 +38,6 @@ jobs:
       - name: Preqrequisites
         run: |
           brew install cmake libusb pkg-config openssl
-          brew install apenngrace/vulkan/vulkan-sdk --cask
           brew install --cask powershell
 
       # run build command
