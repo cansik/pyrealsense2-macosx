@@ -8,12 +8,13 @@
 # brew install openssl
 
 param (
-    [string]$tag = "v2.51.1",
+    [string]$tag = "v2.54.2",
     [string]$root = "librealsense",
     [string]$libusbPath = "libusb",
     [string]$libusbTag = "v1.0.26",
     [string]$dist = "dist",
-    [bool]$delocate = $true
+    [bool]$delocate = $true,
+    [switch]$clean
 )
 
 function Replace-AllStringsInFile($SearchString, $ReplaceString, $FullPathToFile)
@@ -22,12 +23,21 @@ function Replace-AllStringsInFile($SearchString, $ReplaceString, $FullPathToFile
     [System.IO.File]::WriteAllText("$FullPathToFile", $content)
 }
 
+# set load dll support if conda is used
+$env:CONDA_DLL_SEARCH_MODIFICATION_ENABLE=1
+
 # cleanup
-Remove-Item $root -Force -Recurse -ErrorAction Ignore
-Remove-Item $libusbPath -Force -Recurse -ErrorAction Ignore
+if ($clean)
+{
+    Remove-Item $root -Force -Recurse -ErrorAction Ignore
+    Remove-Item $libusbPath -Force -Recurse -ErrorAction Ignore
+}
 
 Write-Host "building libusb universal..."
-git clone --depth 1 --branch $libusbTag "https://github.com/libusb/libusb" $libusbPath
+if ($clean -or !(Test-Path -Path $libusbPath -PathType Container))
+{
+    git clone --depth 1 --branch $libusbTag "https://github.com/libusb/libusb" $libusbPath
+}
 
 $libusb_include = Resolve-Path "$libusbPath/libusb"
 pushd "$libusbPath/Xcode"
@@ -52,14 +62,21 @@ Write-Host ""
 
 Write-Host "creating librealsense python lib version $tag ..."
 $pythonWrapperDir = "wrappers/python"
+$releaseDir = "build/RELEASE/Release"
 
 # clone
-if ($tag -eq "nightly") {
-    Write-Host "using nightly version..."
-    git clone --depth 1 "https://github.com/IntelRealSense/librealsense.git" $root
-} else {
-    Write-Host "using release version..."
-    git clone --depth 1 --branch $tag "https://github.com/IntelRealSense/librealsense.git" $root
+if ($clean -or !(Test-Path -Path $root -PathType Container))
+{
+    if ($tag -eq "nightly")
+    {
+        Write-Host "using nightly version..."
+        git clone --depth 1 "https://github.com/IntelRealSense/librealsense.git" $root
+    }
+    else
+    {
+        Write-Host "using release version..."
+        git clone --depth 1 --branch $tag "https://github.com/IntelRealSense/librealsense.git" $root
+    }
 }
 
 pushd $root
@@ -90,27 +107,30 @@ xcodebuild -scheme pyrealsense2 -configuration Release MACOSX_DEPLOYMENT_TARGET=
 
 popd
 
-# copy libusb library
-cp -a $libusb_binary "$pythonWrapperDir/pyrealsense2"
-cp -a $libusb_binary "build/Release"
+Write-Host $(pwd)
+Write-Host -ForegroundColor Cyan "Copying libraries..."
 
-# copy realsense libraries
-cp -a build/Release/*.dylib "$pythonWrapperDir/pyrealsense2"
+# Copy libusb library
+Copy-Item -Path $libusb_binary -Destination "$pythonWrapperDir\pyrealsense2" -Force
+Copy-Item -Path $libusb_binary -Destination $releaseDir -Force
 
-# copy python libraries
-cp -a build/wrappers/python/Release/*.so "$pythonWrapperDir/pyrealsense2"
+# Copy realsense libraries
+Copy-Item -Path "$releaseDir\*.dylib" -Destination "$pythonWrapperDir\pyrealsense2" -Force
+
+# Copy python libraries
+Copy-Item -Path "$releaseDir\*.so" -Destination "$pythonWrapperDir\pyrealsense2" -Force
 
 # build bdist_wheel
 pushd $pythonWrapperDir
-
 
 python find_librs_version.py ../../  pyrealsense2
 
 Replace-AllStringsInFile "name=package_name" "name=`"pyrealsense2-macosx`"" "$root/$pythonWrapperDir/setup.py"
 Replace-AllStringsInFile "https://github.com/IntelRealSense/librealsense" "https://github.com/cansik/pyrealsense2-macosx" "$root/$pythonWrapperDir/setup.py"
 
+pip install -r ./requirements.txt
 pip install wheel
-python setup.py bdist_wheel --plat-name=macosx_11_0_universal2
+python setup.py bdist_wheel
 
 # delocate wheel
 if ($delocate)
