@@ -114,12 +114,21 @@ cmake .. -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64" `
 -G Xcode
 Check-LastCommandStatusAndExit "Could not generate build configuration!"
 
+# find the list of build modules
+$build_modules = $(xcodebuild -list).Split([Environment]::NewLine) | ForEach-Object { $_.Trim() }
+
 # build
 xcodebuild -scheme realsense2 -configuration Release MACOSX_DEPLOYMENT_TARGET=$deploymentTarget
 Check-LastCommandStatusAndExit "realsense2 could not be built!"
 
-xcodebuild -scheme pybackend2 -configuration Release MACOSX_DEPLOYMENT_TARGET=$deploymentTarget
-Check-LastCommandStatusAndExit "pybackend2 could not be built!"
+# check if pybackend2 is in build list
+if ($build_modules -contains "pybackend2")
+{
+    xcodebuild -scheme pybackend2 -configuration Release MACOSX_DEPLOYMENT_TARGET = $deploymentTarget
+    Check-LastCommandStatusAndExit "pybackend2 could not be built!"
+} else {
+    Write-Host -ForegroundColor Yellow "Skipping pybackend2 because it is not in build configuration."
+}
 
 xcodebuild -scheme pyrealsense2 -configuration Release MACOSX_DEPLOYMENT_TARGET=$deploymentTarget
 Check-LastCommandStatusAndExit "pyrealsense2 could not be built!"
