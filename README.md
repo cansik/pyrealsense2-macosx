@@ -55,8 +55,11 @@ Install [homebrew](https://brew.sh/) and the following packages:
 ```bash
 sudo xcode-select --install
 brew install cmake pkg-config openssl
-brew install apenngrace/vulkan/vulkan-sdk --cask
 brew install --cask powershell
+
+# the vulkan sdk seems to not be needed anymore
+# and is deprecated anyways (download error 404)
+# brew install apenngrace/vulkan/vulkan-sdk --cask
 ```
 
 And set up a new python virtual environment:
@@ -100,4 +103,4 @@ pip install pyrealsense2-2.48.0-cp39-cp39-macosx_11_0_x86_64.whl
 
 ### About
 
-MIT License - Copyright (c) 2022 Florian Bruggisser
+MIT License - Copyright (c) 2024 Florian Bruggisser
