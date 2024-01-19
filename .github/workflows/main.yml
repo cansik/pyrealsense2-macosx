@@ -6,7 +6,7 @@ on:
       tag:
         description: 'RealSense Version Tag'
         required: false
-        default: 'v2.54.2'
+        default: 'master'
       label:
         description: 'Additional label for release'
         required: false
