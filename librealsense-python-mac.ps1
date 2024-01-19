@@ -159,13 +159,7 @@ Replace-AllStringsInFile "https://github.com/IntelRealSense/librealsense" "https
 pip install -r ./requirements.txt
 pip install wheel
 
-# build python binary (need to add universal flag for version < 3.9)
-[int]$pythonMajorMinorVersion = python -c "import sys; print(str(sys.version_info.major) + str(sys.version_info.minor))"
-if ($pythonMajorMinorVersion -lt 310) {
-    python setup.py bdist_wheel --plat-name="macosx_$($deploymentTarget)_0_universal2"
-} else {
-    python setup.py bdist_wheel
-}
+python setup.py bdist_wheel --plat-name="macosx_$($deploymentTarget)_0_universal2"
 
 Check-LastCommandStatusAndExit "python wheel could not be created!"
 
