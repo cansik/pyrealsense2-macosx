@@ -6,7 +6,7 @@ on:
       tag:
         description: 'RealSense Version Tag'
         required: false
-        default: 'v2.53.1'
+        default: 'v2.54.2'
       label:
         description: 'Additional label for release'
         required: false
@@ -14,7 +14,7 @@ on:
       prerelease:
         description: 'Mark Release as Pre-Release'
         required: false
-        default: 'false'
+        default: 'true'
 
 jobs:
   build:
@@ -22,7 +22,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ 'macos-12' ]
-        python-version: [ '3.8', '3.9', '3.10', '3.11', '3.12' ]
+        python-version: [ '3.8', '3.9', '3.10', '3.11' ]
   
     runs-on: ${{ matrix.os }}
 
@@ -60,4 +60,4 @@ jobs:
           body: "Prebuilt pyrealsense2-macosx wheel packages for MacOS for librealsense2 version ${{ github.event.inputs.tag }}."
           overwrite: true
           file_glob: true
-          # prerelease: ${{ github.event.inputs.prerelease }}
+          prerelease: ${{ github.event.inputs.prerelease }}
