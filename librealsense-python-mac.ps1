@@ -4,7 +4,6 @@
 # prerequisites (https://github.com/IntelRealSense/librealsense/blob/master/doc/installation_osx.md)
 # sudo xcode-select --install
 # brew install cmake libusb pkg-config
-# brew install apenngrace/vulkan/vulkan-sdk --cask # be aware of the /usr/locals permissions
 # brew install openssl
 
 param (
@@ -14,8 +13,20 @@ param (
     [string]$libusbTag = "v1.0.26",
     [string]$dist = "dist",
     [bool]$delocate = $true,
+    [string]$deploymentTarget = "12",
     [switch]$clean
 )
+
+function Check-LastCommandStatusAndExit {
+    param (
+        [string]$CustomErrorMessage = "The last command exited with an error."
+    )
+
+    if (-not $?) {
+        Write-Error "!!! Error during build script: $CustomErrorMessage"
+        exit 1
+    }
+}
 
 function Replace-AllStringsInFile($SearchString, $ReplaceString, $FullPathToFile)
 {
@@ -43,7 +54,8 @@ $libusb_include = Resolve-Path "$libusbPath/libusb"
 pushd "$libusbPath/Xcode"
 mkdir build
 
-xcodebuild -scheme libusb -configuration Release -derivedDataPath "$pwd/build" MACOSX_DEPLOYMENT_TARGET=11
+xcodebuild -scheme libusb -configuration Release -derivedDataPath "$pwd/build" MACOSX_DEPLOYMENT_TARGET=$deploymentTarget
+Check-LastCommandStatusAndExit "libusb could not be built!"
 
 pushd "build/Build/Products/Release"
 # install_name_tool -id @loader_path/libusb-1.0.0.dylib libusb-1.0.0.dylib
@@ -96,14 +108,21 @@ cmake .. -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64" `
 -DBUILD_GRAPHICAL_EXAMPLES=OFF `
 -DHWM_OVER_XU=false `
 -DOPENSSL_ROOT_DIR=/opt/homebrew/opt/openssl `
--DCMAKE_OSX_DEPLOYMENT_TARGET=11 `
+-DCMAKE_OSX_DEPLOYMENT_TARGET=$deploymentTarget `
 -DLIBUSB_INC="$libusb_include" `
 -DLIBUSB_LIB="$libusb_binary" `
 -G Xcode
+Check-LastCommandStatusAndExit "Could not generate build configuration!"
 
-xcodebuild -scheme realsense2 -configuration Release MACOSX_DEPLOYMENT_TARGET=11
-xcodebuild -scheme pybackend2 -configuration Release MACOSX_DEPLOYMENT_TARGET=11
-xcodebuild -scheme pyrealsense2 -configuration Release MACOSX_DEPLOYMENT_TARGET=11
+# build
+xcodebuild -scheme realsense2 -configuration Release MACOSX_DEPLOYMENT_TARGET=$deploymentTarget
+Check-LastCommandStatusAndExit "realsense2 could not be built!"
+
+xcodebuild -scheme pybackend2 -configuration Release MACOSX_DEPLOYMENT_TARGET=$deploymentTarget
+Check-LastCommandStatusAndExit "pybackend2 could not be built!"
+
+xcodebuild -scheme pyrealsense2 -configuration Release MACOSX_DEPLOYMENT_TARGET=$deploymentTarget
+Check-LastCommandStatusAndExit "pyrealsense2 could not be built!"
 
 popd
 
@@ -130,7 +149,16 @@ Replace-AllStringsInFile "https://github.com/IntelRealSense/librealsense" "https
 
 pip install -r ./requirements.txt
 pip install wheel
-python setup.py bdist_wheel --universal
+
+# build python binary (need to add universal flag for version < 3.9)
+[int]$pythonMajorMinorVersion = python -c "import sys; print(str(sys.version_info.major) + str(sys.version_info.minor))"
+if ($pythonMajorMinorVersion -lt 310) {
+    python setup.py bdist_wheel --plat-name="macosx_$($deploymentTarget)_0_universal2"
+} else {
+    python setup.py bdist_wheel
+}
+
+Check-LastCommandStatusAndExit "python wheel could not be created!"
 
 # delocate wheel
 if ($delocate)
@@ -144,5 +172,7 @@ popd
 popd
 New-Item -ItemType Directory -Force -Path $dist
 Get-ChildItem -Path "$root/wrappers/python/dist/*" -Include *.whl | Copy-Item -Destination $dist
+
 Write-Host ""
-Write-Host "Finished! The build files are in $dist"
+Write-Host -ForegroundColor Green "Finished! The build files are in $dist"
+exit 0
