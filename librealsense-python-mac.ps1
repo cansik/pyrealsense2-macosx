@@ -130,7 +130,7 @@ Replace-AllStringsInFile "https://github.com/IntelRealSense/librealsense" "https
 
 pip install -r ./requirements.txt
 pip install wheel
-python setup.py bdist_wheel
+python setup.py bdist_wheel --universal
 
 # delocate wheel
 if ($delocate)
