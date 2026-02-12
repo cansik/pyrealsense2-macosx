@@ -16,7 +16,7 @@ pip install pyrealsense2-macosx
 
 - OS: *macOS Catalina*[*](#older-macos-and-python-) (`10.15`), *macOS Big Sur*[*](#older-macos-and-python-) (`11`), macOS Monterey (`12`) and higher
 - Architecture: `Intel (x86_64)`, `Apple Silicon (arm64)`
-- Python: `3.6`\*, `3.7`\*, `3.8`, `3.9`, `3.10`, `3.11`, `3.12`
+- Python: `3.6`\*, `3.7`\*, `3.8`, `3.9`, `3.10`, `3.11`, `3.12`, `3.13`
 
 #### requirements.txt
 
