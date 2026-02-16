@@ -15,7 +15,7 @@ pip install pyrealsense2-macosx
 *Supported Platforms & Versions*
 
 - OS: Sequoia (`15`) and higher
-- Architecture: `Intel (x86_64)`, `Apple Silicon (arm64)`
+- Architecture: `Apple Silicon (arm64)`
 - Python: `3.9`, `3.10`, `3.11`, `3.12`, `3.13`, `3.13t`, `3.14`, `3.14t`
 
 For version `3.6` to `3.8` and older operating systems `<15`, please have a look at the [legacy support](#older-macos-and-python-) section of the readme.
