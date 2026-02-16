@@ -22,7 +22,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ 'macos-latest' ]
-        python-version: [ '3.9', '3.10', '3.11', '3.12', '3.13' ]
+        python-version: [ '3.9', '3.10', '3.11', '3.12', '3.13', '3.13t', '3.14', '3.14t' ]
   
     runs-on: ${{ matrix.os }}
 
@@ -60,4 +60,5 @@ jobs:
           body: "Prebuilt pyrealsense2-macosx wheel packages for MacOS for librealsense2 version ${{ github.event.inputs.tag }}."
           overwrite: true
           file_glob: true
+          draft: true
           prerelease: ${{ github.event.inputs.prerelease }}
