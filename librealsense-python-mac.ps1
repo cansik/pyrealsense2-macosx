@@ -111,6 +111,7 @@ cmake .. -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64" `
 -DCMAKE_OSX_DEPLOYMENT_TARGET=$deploymentTarget `
 -DLIBUSB_INC="$libusb_include" `
 -DLIBUSB_LIB="$libusb_binary" `
+-DFORCE_RSUSB_BACKEND=ON `
 -G Xcode
 Check-LastCommandStatusAndExit "Could not generate build configuration!"
 
