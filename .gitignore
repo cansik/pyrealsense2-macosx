@@ -5,3 +5,4 @@ dist
 nev
 .DS_Store
 libusb
+.venv
