@@ -1,7 +1,7 @@
 name: MacOSX Test
 
 env:
-  tag: 'v2.51.1'
+  tag: 'v2.56.5'
 
 on:
   workflow_dispatch:
@@ -10,16 +10,16 @@ jobs:
   build:
     strategy:
       matrix:
-        os: [ 'macos-10.15', 'macos-11', 'macos-12' ]
-        python-version: [ '3.6', '3.7', '3.8', '3.9', '3.10' ]
+        os: [ 'macos-15-intel', "macos-latest" ]
+        python-version: [ '3.9', '3.10', '3.11', '3.12', '3.13' ]
   
     runs-on: ${{ matrix.os }}
 
     name: python ${{ matrix.python-version }} on ${{ matrix.os }}
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE
-      - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
         with:
           python-version: ${{ matrix.python-version }}
       

@@ -21,16 +21,16 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ 'macos-12' ]
-        python-version: [ '3.8', '3.9', '3.10', '3.11', '3.12' ]
+        os: [ 'macos-latest' ]
+        python-version: [ '3.9', '3.10', '3.11', '3.12', '3.13' ]
   
     runs-on: ${{ matrix.os }}
 
     name: ${{ github.event.inputs.tag }} python ${{ matrix.python-version }} on ${{ matrix.os }}
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE
-      - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
         with:
           python-version: ${{ matrix.python-version }}
       

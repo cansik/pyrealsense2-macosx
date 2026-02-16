@@ -6,7 +6,7 @@ on:
       tag:
         description: 'Version Tag'
         required: false
-        default: 'macosx-v2.51.1'
+        default: 'macosx-v2.56.5'
 
 
 jobs:
@@ -15,11 +15,11 @@ jobs:
     environment: production
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v6
     - name: Set up Python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v6
       with:
-        python-version: '3.8'
+        python-version: '3.12'
 
     - name: "Download binaries from ${{ github.event.inputs.tag }}"
       uses: robinraju/release-downloader@v1.3
