@@ -14,9 +14,11 @@ pip install pyrealsense2-macosx
 
 *Supported Platforms & Versions*
 
-- OS: *macOS Catalina*[*](#older-macos-and-python-) (`10.15`), *macOS Big Sur*[*](#older-macos-and-python-) (`11`), macOS Monterey (`12`) and higher
+- OS: Sequoia (`15`) and higher
 - Architecture: `Intel (x86_64)`, `Apple Silicon (arm64)`
-- Python: `3.6`\*, `3.7`\*, `3.8`, `3.9`, `3.10`, `3.11`, `3.12`
+- Python: `3.9`, `3.10`, `3.11`, `3.12`, `3.13`, `3.13t`, `3.14`, `3.14t`
+
+For version `3.6` to `3.8` and older operating systems `<15`, please have a look at the [legacy support](#older-macos-and-python-) section of the readme.
 
 #### requirements.txt
 
@@ -65,7 +67,7 @@ brew install --cask powershell
 And set up a new python virtual environment:
 
 ```bash
-python3.9 -m venv venv
+python -m venv venv
 source venv/bin/activate
 ```
 
@@ -80,7 +82,7 @@ pwsh librealsense-python-mac.ps1
 It is possible to set the [tag version](https://github.com/IntelRealSense/librealsense/tags) to build older releases:
 
 ```
-pwsh librealsense-python-mac.ps1 -tag v2.49.0
+pwsh librealsense-python-mac.ps1 -tag v2.56.5
 ```
 
 The prebuild wheel files are copied into the `./dist` directory. By default, the dylib is added to the wheel file with the delocate toolkit. It is possible to disable this behaviour for just the python build:
@@ -103,4 +105,4 @@ pip install pyrealsense2-2.48.0-cp39-cp39-macosx_11_0_x86_64.whl
 
 ### About
 
-MIT License - Copyright (c) 2024 Florian Bruggisser
+MIT License - Copyright (c) 2026 Florian Bruggisser
