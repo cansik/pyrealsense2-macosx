@@ -3,7 +3,7 @@
 [![MacOS Test](https://github.com/cansik/pyrealsense2-macosx/actions/workflows/test.yml/badge.svg)](https://github.com/cansik/pyrealsense2-macosx/actions/workflows/test.yml)
 [![PyPI](https://img.shields.io/pypi/v/pyrealsense2-macosx)](https://pypi.org/project/pyrealsense2-macosx/)
 
-Prebuilt pyrealsense2 packages of the [librealsense](https://github.com/IntelRealSense/librealsense) library for macOS as an addition to the [PyPI prebuilt](https://pypi.org/project/pyrealsense2/) packages by Intel.
+Prebuilt pyrealsense2 packages of the [librealsense](https://github.com/realsenseai/librealsense) library for macOS as an addition to the [PyPI prebuilt](https://pypi.org/project/pyrealsense2/) packages by Intel.
 
 ### Prebuilt
 To install the prebuilt wheel packages from this repository, run the following command (macOSX librealsense is included):
@@ -46,7 +46,7 @@ pip install pyrealsense2-macosx~=2.53.1
 
 #### Sudo
 
-Since `2.50.0` the realsense binaries have to run under sudo on some MacOS to find a device. Otherwise strange errors appear (`failed to set power state`). This seems to be a bug in the realsense framework and is already discussed in [this librealsense2 issue](https://github.com/IntelRealSense/librealsense/issues/9916#issuecomment-1082893427).
+Since `2.50.0` the realsense binaries have to run under sudo on some MacOS to find a device. Otherwise strange errors appear (`failed to set power state`). This seems to be a bug in the realsense framework and is already discussed in [this librealsense2 issue](https://github.com/realsenseai/librealsense/issues/9916#issuecomment-1082893427).
 
 
 ### Manual Build
@@ -79,7 +79,7 @@ Run the build script in your preferred shell.
 pwsh librealsense-python-mac.ps1
 ```
 
-It is possible to set the [tag version](https://github.com/IntelRealSense/librealsense/tags) to build older releases:
+It is possible to set the [tag version](https://github.com/realsenseai/librealsense/tags) to build older releases:
 
 ```
 pwsh librealsense-python-mac.ps1 -tag v2.56.5
