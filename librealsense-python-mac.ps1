@@ -7,13 +7,13 @@
 # brew install openssl
 
 param (
-    [string]$tag = "v2.54.2",
+    [string]$tag = "v2.56.5",
     [string]$root = "librealsense",
     [string]$libusbPath = "libusb",
-    [string]$libusbTag = "v1.0.26",
+    [string]$libusbTag = "v1.0.29",
     [string]$dist = "dist",
     [bool]$delocate = $true,
-    [string]$deploymentTarget = "12",
+    [string]$deploymentTarget = "15",
     [switch]$clean
 )
 
@@ -153,19 +153,14 @@ pushd $pythonWrapperDir
 
 python find_librs_version.py ../../  pyrealsense2
 
-Replace-AllStringsInFile "name=package_name" "name=`"pyrealsense2-macosx`"" "$root/$pythonWrapperDir/setup.py"
-Replace-AllStringsInFile "https://github.com/IntelRealSense/librealsense" "https://github.com/cansik/pyrealsense2-macosx" "$root/$pythonWrapperDir/setup.py"
+Replace-AllStringsInFile "name = `"pyrealsense2`"" "name=`"pyrealsense2-macosx`"" "$root/$pythonWrapperDir/pyproject.toml"
+Replace-AllStringsInFile "https://github.com/IntelRealSense/librealsense" "https://github.com/cansik/pyrealsense2-macosx" "$root/$pythonWrapperDir/pyproject.toml"
 
 pip install -r ./requirements.txt
 pip install wheel
 
-# build python binary (need to add universal flag for version < 3.9)
-[int]$pythonMajorMinorVersion = python -c "import sys; print(str(sys.version_info.major) + str(sys.version_info.minor))"
-if ($pythonMajorMinorVersion -lt 311) {
-    python setup.py bdist_wheel --plat-name="macosx_$($deploymentTarget)_0_universal2"
-} else {
-    python setup.py bdist_wheel
-}
+# build
+python -m build --wheel
 
 Check-LastCommandStatusAndExit "python wheel could not be created!"
 
